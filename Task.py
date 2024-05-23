@@ -7,7 +7,7 @@ class Task:
 
     def __init__(self, task_description: str, priority: str, type: TaskType, sprint_number: str, task_number: int = -1):
         if task_number == -1:
-            self.task_number = len(Task.get_extent()) + 1
+            self.task_number = max(task.task_number for task in Task.get_extent()) + 1 if Task.get_extent() else 1
         else:
             self.task_number = task_number
         self.task_description = task_description
@@ -57,3 +57,10 @@ class Task:
                     )
                 except:
                     print("Error while adding Task: " + entry)
+
+    @staticmethod
+    def remove_from_extent(task_number: int):
+        filtered_tasks = list(filter(lambda task: task.task_number == task_number, Task.__taskExtent))
+        if len(filtered_tasks) != 1:
+            raise ValueError
+        Task.__taskExtent.remove(filtered_tasks[0])
