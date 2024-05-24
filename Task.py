@@ -5,10 +5,11 @@ from InvalidTaskInputException import InvalidTaskInputException
 from TaskPriority import TaskPriority
 from TaskStatus import TaskStatus
 from TaskType import TaskType
-import itertools
+
 
 class Task:
-    __taskExtent = []
+
+    __taskExtent = set()
 
     def __init__(self, task_description: str, task_title: str, priority: TaskPriority, type: TaskType, status: TaskStatus, sprint_number: str, task_number: int = -1):
         self.task_number = None
@@ -26,7 +27,7 @@ class Task:
         self.set_task_type(type)
         self.set_task_sprint_number(sprint_number)
         self.set_task_status(status)
-        Task.__taskExtent.append(self)
+        Task.__taskExtent.add(self)
 
     def __str__(self):
         return (f'Task number: {self.task_number}\n'
@@ -70,7 +71,7 @@ class Task:
 
     @staticmethod
     def get_extent():
-        return Task.__taskExtent
+        return set(Task.__taskExtent)
 
     @staticmethod
     def print_extent():
