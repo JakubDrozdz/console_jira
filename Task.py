@@ -1,7 +1,7 @@
 import csv
-import re
 
 from InvalidTaskInputException import InvalidTaskInputException
+from Sprint import Sprint
 from TaskPriority import TaskPriority
 from TaskStatus import TaskStatus
 from TaskType import TaskType
@@ -9,9 +9,9 @@ from TaskType import TaskType
 
 class Task:
 
-    __taskExtent = set()
+    __taskExtent = []
 
-    def __init__(self, task_description: str, task_title: str, priority: TaskPriority, type: TaskType, status: TaskStatus, sprint_number: str, task_number: int = -1):
+    def __init__(self, task_description: str, task_title: str, priority: TaskPriority, type: TaskType, status: TaskStatus, sprint_number: Sprint, task_number: int = -1):
         self.task_number = None
         self.task_title = None
         self.task_description = None
@@ -27,7 +27,7 @@ class Task:
         self.set_task_type(type)
         self.set_task_sprint_number(sprint_number)
         self.set_task_status(status)
-        Task.__taskExtent.add(self)
+        Task.__taskExtent.append(self)
 
     def __str__(self):
         return (f'Task number: {self.task_number}\n'
@@ -36,7 +36,7 @@ class Task:
                 f'Task priority: {self.priority}\n'
                 f'Task type: {self.type}\n'
                 f'Task status: {self.task_status}\n'
-                f'Sprint number: {self.sprint_number}')
+                f'Sprint number: {self.sprint_number.get_sprint_number()}')
 
     def set_task_number(self, task_number: int):
         if task_number == -1:
@@ -58,12 +58,7 @@ class Task:
     def set_task_type(self, type: TaskType):
         self.type = type
 
-    def set_task_sprint_number(self, sprint_number: str):
-        pattern = re.compile(r'^S\d{1,}$')
-        if sprint_number is None or not sprint_number.strip():
-            raise InvalidTaskInputException("Sprint number cannot be null nor empty")
-        if not pattern.match(sprint_number):
-            raise InvalidTaskInputException("Sprint number must match format S<number>")
+    def set_task_sprint_number(self, sprint_number: Sprint):
         self.sprint_number = sprint_number
 
     def set_task_status(self, status: TaskStatus):
@@ -71,7 +66,7 @@ class Task:
 
     @staticmethod
     def get_extent():
-        return set(Task.__taskExtent)
+        return list(Task.__taskExtent)
 
     @staticmethod
     def print_extent():
@@ -101,7 +96,7 @@ class Task:
                         priority=TaskPriority(entry["priority"]),
                         type=TaskType(entry["type"]),
                         status=TaskStatus(entry["status"]),
-                        sprint_number=str(entry["sprint_number"])
+                        sprint_number=Sprint.get_sprint(entry["sprint_number"])
                     )
                 except:
                     print("Error while adding Task: " + entry)

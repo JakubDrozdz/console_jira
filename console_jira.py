@@ -1,3 +1,5 @@
+from datetime import *
+
 from Task import *
 
 
@@ -27,6 +29,7 @@ def show_menu():
     print("1 - add task")
     print("2 - remove task")
     print("3 - list tasks")
+    print("4 - add sprint")
     print("0 - exit")
 
 
@@ -38,6 +41,11 @@ def invoke_option(user_input):
             remove_task()
         case 3:
             Task.print_extent()
+        case 4:
+            try:
+                create_sprint()
+            except ValueError:
+                print("Invalid date format")
 
 
 def add_task():
@@ -56,7 +64,7 @@ def add_task():
         for value in TaskStatus:
             print(f"\t{value}")
         task_status = TaskStatus(input("Enter task status: "))
-        sprint = str(input("Enter sprint number: "))
+        sprint = choose_sprint()
         Task(task_title=task_title, task_description=task_description, priority=priority, type=TaskType(task_type), status=TaskStatus(task_status), sprint_number=sprint)
     except ValueError:
         print("Wrong data!\nAborting operation")
@@ -71,3 +79,23 @@ def remove_task():
         Task.remove_from_extent(user_input)
     except ValueError:
         print("Invalid input")
+
+
+def choose_sprint():
+    return Sprint.get_extent()[0]
+
+
+def create_sprint():
+    print("Details of next sprint:")
+    print("Sprint number: " + str(Sprint.calculate_sprint_number()))
+    start_date = Sprint.calculate_start_date()
+    print("Sprint start date: " + str(start_date))
+    end_date = datetime.strptime(input("Enter end date(yyyy-mm-dd) (sprint max length is 2 - 4 weeks):"), "%Y-%m-%d").date()
+    end_date = Sprint.calculate_end_date(end_date=end_date, start_date=start_date)
+    print("Sprint end date: " + str(end_date))
+    accepted = input("Pres Y to accept or other key to reject:")
+    if accepted.lower() == "y":
+        Sprint(end_date)
+        print("Sprint created")
+    else:
+        print("Sprint not created")
