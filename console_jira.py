@@ -41,7 +41,27 @@ def invoke_option(user_input):
 
 
 def add_task():
-    Task(task_description="test desc", priority="high", type=TaskType.TASK, sprint_number="S01")
+    try:
+        task_title = str(input("Enter task title "))
+        task_description = str(input("Enter task description: "))
+        print("Choose task priority from following: ")
+        for value in TaskPriority:
+            print(f"\t{value}")
+        priority = TaskPriority(input("Enter task priority: "))
+        print("Choose task type from following: ")
+        for value in TaskType:
+            print(f"\t{value}")
+        task_type = TaskType(input("Enter task type: "))
+        print("Choose task status from following: ")
+        for value in TaskStatus:
+            print(f"\t{value}")
+        task_status = TaskStatus(input("Enter task status: "))
+        sprint = str(input("Enter sprint number: "))
+        Task(task_title=task_title, task_description=task_description, priority=priority, type=TaskType(task_type), status=TaskStatus(task_status), sprint_number=sprint)
+    except ValueError:
+        print("Wrong data!\nAborting operation")
+    except InvalidTaskInputException as ex:
+        print(ex.message + "\nAborting operation")
 
 
 def remove_task():
