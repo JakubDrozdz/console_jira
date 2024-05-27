@@ -1,6 +1,6 @@
 import csv
 
-from InvalidTaskInputException import InvalidTaskInputException
+from exception.InvalidTaskInputException import InvalidTaskInputException
 from Sprint import Sprint
 from TaskPriority import TaskPriority
 from TaskStatus import TaskStatus
@@ -81,7 +81,7 @@ class Task:
             writer = csv.DictWriter(tasks_file, fieldnames, delimiter=";")
             writer.writeheader()
             for task in Task.__taskExtent:
-                tasks_file.write(f'{task.task_number};{task.task_title};{task.task_description};{task.priority};{task.type};{task.task_status};{task.sprint_number}\n')
+                tasks_file.write(f'{task.task_number};{task.task_title};{task.task_description};{task.priority};{task.type};{task.task_status};{task.sprint_number.get_sprint_number()}\n')
 
     @staticmethod
     def read_extent():

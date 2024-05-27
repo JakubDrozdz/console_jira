@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, date
 import csv
 
-from NoSprintPresentException import NoSprintPresentException
+from exception.NoSprintPresentException import NoSprintPresentException
 
 
 class Sprint:
