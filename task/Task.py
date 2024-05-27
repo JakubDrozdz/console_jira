@@ -1,10 +1,10 @@
 import csv
 
 from exception.InvalidTaskInputException import InvalidTaskInputException
-from Sprint import Sprint
-from TaskPriority import TaskPriority
-from TaskStatus import TaskStatus
-from TaskType import TaskType
+from sprint.Sprint import Sprint
+from task.enum.TaskPriority import TaskPriority
+from task.enum.TaskStatus import TaskStatus
+from task.enum.TaskType import TaskType
 
 
 class Task:
@@ -186,7 +186,7 @@ class Task:
 
     @staticmethod
     def read_extent():
-        with open("tasks.csv", "r") as tasks_file:
+        with open("task/tasks.csv", "r") as tasks_file:
             reader = csv.DictReader(tasks_file, delimiter=";")
             for entry in reader:
                 try:

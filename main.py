@@ -1,8 +1,5 @@
-from datetime import date
-
 from console_jira import *
-from Task import *
-from TaskType import *
+from task.Task import *
 
 if __name__ == '__main__':
     Sprint.read_extent()

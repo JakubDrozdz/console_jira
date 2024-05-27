@@ -1,6 +1,6 @@
 from datetime import *
 
-from Task import *
+from task.Task import *
 from exception.NoSprintPresentException import NoSprintPresentException
 
 

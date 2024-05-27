@@ -85,7 +85,7 @@ class Sprint:
 
     @staticmethod
     def read_extent():
-        with open("sprints.csv", "r") as tasks_file:
+        with open("sprint/sprints.csv", "r") as tasks_file:
             reader = csv.DictReader(tasks_file, delimiter=";")
             for entry in reader:
                 try:
