@@ -77,7 +77,7 @@ class Task:
         user_input = input("Yout choice: ")
         try:
             user_input = int(user_input)
-            if user_input < 0 or user_input > 5:
+            if user_input <= 0 or user_input > 5:
                 raise ValueError
         except ValueError:
             print("Invalid input")
@@ -125,6 +125,54 @@ class Task:
     def print_extent():
         print("All tasks:", end="\n\n")
         for task in Task.__taskExtent:
+            print(task, end="\n\n")
+
+    @staticmethod
+    def print_filtered_extent():
+        print("Choose filter:")
+        print("1 - by priority")
+        print("2 - by type")
+        print("3 - by status")
+        print("4 - by sprint")
+
+        user_input = input("Yout choice: ")
+        try:
+            user_input = int(user_input)
+            if user_input <= 0 or user_input > 4:
+                raise ValueError
+        except ValueError:
+            print("Invalid input")
+            return
+
+        tasks = set()
+        match user_input:
+            case 1:
+                print("Choose task priority from following: ")
+                for value in TaskPriority:
+                    print(f"\t{value}")
+                priority = TaskPriority(input("Task priority: "))
+                tasks = set(filter(lambda task: task.priority == priority, Task.__taskExtent))
+            case 2:
+                print("Choose task type from following: ")
+                for value in TaskType:
+                    print(f"\t{value}")
+                type = TaskType(input("Task type: "))
+                tasks = set(filter(lambda task: task.type == type, Task.__taskExtent))
+            case 3:
+                print("Choose task status from following: ")
+                for value in TaskStatus:
+                    print(f"\t{value}")
+                status= TaskStatus(input("Task status: "))
+                tasks = set(filter(lambda task: task.task_status == status, Task.__taskExtent))
+            case 4:
+                print("Choose task status from following: ")
+                for value in Sprint.get_extent():
+                    print(f"\t{value.get_sprint_number()}")
+                sprint_number = Sprint.get_sprint(input("Sprint number: "))
+                tasks = set(filter(lambda task: task.sprint_number == sprint_number, Task.__taskExtent))
+
+        print("Tasks:", end="\n\n")
+        for task in tasks:
             print(task, end="\n\n")
 
     @staticmethod

@@ -31,8 +31,9 @@ def show_menu():
     print("2 - edit task")
     print("3 - remove task")
     print("4 - list tasks")
-    print("5 - add sprint")
-    print("6 - list sprints")
+    print("5 - list filtered tasks")
+    print("6 - add sprint")
+    print("7 - list sprints")
     print("0 - exit")
 
 
@@ -48,10 +49,17 @@ def invoke_option(user_input):
             Task.print_extent()
         case 5:
             try:
+                Task.print_filtered_extent()
+            except NoSprintPresentException as ex:
+                print(ex.message + "\nOperation cancelled")
+            except ValueError:
+                print("Wrong data! Operation cancelled")
+        case 6:
+            try:
                 create_sprint()
             except ValueError:
                 print("Invalid date format")
-        case 6:
+        case 7:
             Sprint.list_sprints()
 
 
