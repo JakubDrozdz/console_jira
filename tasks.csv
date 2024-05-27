@@ -1,2 +1,7 @@
 task_number;task_title;task_description;priority;type;status;sprint_number
 1;Test 1;Test desc 1;Low;Task;Open;S1
+2;Test task 2;Test desc 2;Medium;Task;Open;S1
+3;Test 2;Test desc 3;High;Story;In review;S1
+4;TT1;TT1;High;Epic;Open;S2
+5;t;t;Low;Task;Open;S2
+6;TT3;TT3;Low;Task;Open;S2

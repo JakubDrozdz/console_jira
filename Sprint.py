@@ -64,12 +64,19 @@ class Sprint:
 
     @staticmethod
     def get_sprint(sprint_number: str):
-        sprints_filtered = filter(lambda sprint: sprint.sprint_number, Sprint.get_extent())
+        sprints_filtered = filter(lambda sprint: sprint.sprint_number == sprint_number, Sprint.get_extent())
         sprint = next(sprints_filtered, None)
         if sprint is None:
             raise NoSprintPresentException("No sprint with number " + sprint_number)
         return sprint
 
+    @staticmethod
+    def get_active_sprints():
+        sprints_filtered = filter(lambda sprint: sprint.end_date >= date.today(), Sprint.get_extent())
+        sprints = set()
+        for sprint in sprints_filtered:
+            sprints.add(sprint)
+        return sprints
 
     @staticmethod
     def write_extent():

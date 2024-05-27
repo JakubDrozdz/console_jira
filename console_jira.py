@@ -1,6 +1,7 @@
 from datetime import *
 
 from Task import *
+from exception.NoSprintPresentException import NoSprintPresentException
 
 
 def app():
@@ -70,6 +71,8 @@ def add_task():
         print("Wrong data!\nAborting operation")
     except InvalidTaskInputException as ex:
         print(ex.message + "\nAborting operation")
+    except NoSprintPresentException as ex:
+        print(ex.message + "\nAborting operation")
 
 
 def remove_task():
@@ -82,7 +85,10 @@ def remove_task():
 
 
 def choose_sprint():
-    return Sprint.get_extent()[0]
+    print("Choose sprint number from following: ")
+    for sprint in Sprint.get_active_sprints():
+        print(f"\t{sprint.get_sprint_number()}")
+    return Sprint.get_sprint(input("Enter sprint number: "))
 
 
 def create_sprint():
