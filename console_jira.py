@@ -34,6 +34,7 @@ def show_menu():
     print("5 - list filtered tasks")
     print("6 - add sprint")
     print("7 - list sprints")
+    print("8 - show tasks board")
     print("0 - exit")
 
 
@@ -61,6 +62,7 @@ def invoke_option(user_input):
                 print("Invalid date format")
         case 7:
             Sprint.list_sprints()
+        case 8: show_tasks_board()
 
 
 def add_task():
@@ -130,3 +132,18 @@ def edit_task():
         print("Invalid input")
     except InvalidTaskInputException as ex:
         print(ex.message + "\nAborting operation")
+
+def show_tasks_board():
+    sprint = choose_sprint()
+    tasks = set(filter(lambda task: task.sprint_number == sprint, Task.get_extent()))
+    grouped_tasks = {TaskStatus.OPEN: [], TaskStatus.IN_PROGRESS: [], TaskStatus.IN_REVIEW: [], TaskStatus.CLOSED: []}
+    for task in tasks:
+        grouped_tasks[task.task_status].append(task)
+    print()
+    for task_group in grouped_tasks:
+        tasks = sorted(grouped_tasks[task_group], key=lambda t: t.task_number, reverse=False)
+        print(task_group.value + ":")
+        for task in tasks:
+            print(str(task.task_number)+";"+task.task_title+":"+task.priority.value)
+        print("---------------")
+    print()

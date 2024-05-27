@@ -76,7 +76,7 @@ class Sprint:
     @staticmethod
     def write_extent():
         fieldnames = ["sprint_number", "start_date", "end_date"]
-        with open("sprints.csv", "w") as sprint_file:
+        with open("sprint/sprints.csv", "w") as sprint_file:
             writer = csv.DictWriter(sprint_file, fieldnames, delimiter=";")
             writer.writeheader()
             for sprint in Sprint.__sprintExtent:
@@ -118,8 +118,8 @@ class Sprint:
     @staticmethod
     def list_sprints():
         print("Active sprints:")
-        for sprint in sorted(Sprint.get_active_sprints(), key=lambda p: p.sprint_number, reverse=True):
+        for sprint in sorted(Sprint.get_active_sprints(), key=lambda s: s.sprint_number, reverse=True):
             print(sprint)
         print("Inactive sprints:")
-        for sprint in sorted(Sprint.get_inactive_sprints(), key=lambda p: p.sprint_number, reverse=True):
+        for sprint in sorted(Sprint.get_inactive_sprints(), key=lambda s: s.sprint_number, reverse=True):
             print(sprint)

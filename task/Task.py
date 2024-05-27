@@ -178,7 +178,7 @@ class Task:
     @staticmethod
     def write_extent():
         fieldnames = ["task_number", "task_title", "task_description", "priority", "type", "status", "sprint_number"]
-        with open("tasks.csv", "w") as tasks_file:
+        with open("task/tasks.csv", "w") as tasks_file:
             writer = csv.DictWriter(tasks_file, fieldnames, delimiter=";")
             writer.writeheader()
             for task in Task.__taskExtent:
