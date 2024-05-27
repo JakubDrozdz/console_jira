@@ -21,6 +21,9 @@ class Sprint:
             self.set_sprint_number()
         Sprint.__sprintExtent.append(self)
 
+    def __str__(self):
+        return (f"{self.sprint_number}, start: {self.start_date}, end: {self.end_date}")
+
     def set_sprint_number(self, sprint_number: str = None):
         if sprint_number is None:
             self.sprint_number = "S" + str(self.calculate_sprint_number())
@@ -71,14 +74,6 @@ class Sprint:
         return sprint
 
     @staticmethod
-    def get_active_sprints():
-        sprints_filtered = filter(lambda sprint: sprint.end_date >= date.today(), Sprint.get_extent())
-        sprints = set()
-        for sprint in sprints_filtered:
-            sprints.add(sprint)
-        return sprints
-
-    @staticmethod
     def write_extent():
         fieldnames = ["sprint_number", "start_date", "end_date"]
         with open("sprints.csv", "w") as sprint_file:
@@ -103,3 +98,28 @@ class Sprint:
                     )
                 except:
                     print("Error while adding Sprint: " + entry)
+
+    @staticmethod
+    def get_active_sprints():
+        sprints_filtered = filter(lambda sprint: sprint.end_date >= date.today(), Sprint.get_extent())
+        sprints = set()
+        for sprint in sprints_filtered:
+            sprints.add(sprint)
+        return sprints
+
+    @staticmethod
+    def get_inactive_sprints():
+        sprints_filtered = filter(lambda sprint: sprint.end_date < date.today(), Sprint.get_extent())
+        sprints = set()
+        for sprint in sprints_filtered:
+            sprints.add(sprint)
+        return sprints
+
+    @staticmethod
+    def list_sprints():
+        print("Active sprints:")
+        for sprint in sorted(Sprint.get_active_sprints(), key=lambda p: p.sprint_number, reverse=True):
+            print(sprint)
+        print("Inactive sprints:")
+        for sprint in sorted(Sprint.get_inactive_sprints(), key=lambda p: p.sprint_number, reverse=True):
+            print(sprint)

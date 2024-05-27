@@ -64,9 +64,62 @@ class Task:
     def set_task_status(self, status: TaskStatus):
         self.task_status = status
 
+    def edit(self):
+        print("Current data:")
+        print(self)
+        print("\nChoose what you want to change:")
+        print("1 - title")
+        print("2 - description")
+        print("3 - priority")
+        print("4 - type")
+        print("5 - status")
+
+        user_input = input("Yout choice: ")
+        try:
+            user_input = int(user_input)
+            if user_input < 0 or user_input > 5:
+                raise ValueError
+        except ValueError:
+            print("Invalid input")
+            return
+
+        match user_input:
+            case 1:
+                task_title = str(input("New task title: "))
+                self.set_task_title(task_title)
+            case 2:
+                task_description = str(input("New task description: "))
+                self.set_task_description(task_description)
+            case 3:
+                print("Choose new task priority from following: ")
+                for value in TaskPriority:
+                    print(f"\t{value}")
+                priority = TaskPriority(input("New task priority: "))
+                self.set_task_priority(priority)
+            case 4:
+                print("Choose new task type from following: ")
+                for value in TaskType:
+                    print(f"\t{value}")
+                task_type = TaskType(input("New task type: "))
+                self.set_task_type(task_type)
+            case 5:
+                print("New task status from following: ")
+                for value in TaskStatus:
+                    print(f"\t{value}")
+                task_status = TaskStatus(input("Enter new task status: "))
+                self.set_task_status(task_status)
+
     @staticmethod
     def get_extent():
         return list(Task.__taskExtent)
+
+    @staticmethod
+    def get_task(task_number: int):
+        tasks_filtered = filter(lambda task: task.task_number == task_number, Task.__taskExtent)
+        task = next(tasks_filtered, None)
+        if task is None:
+            raise InvalidTaskInputException("No task with number " + str(task_number))
+        return task
 
     @staticmethod
     def print_extent():

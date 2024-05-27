@@ -28,9 +28,11 @@ def app():
 
 def show_menu():
     print("1 - add task")
-    print("2 - remove task")
-    print("3 - list tasks")
-    print("4 - add sprint")
+    print("2 - edit task")
+    print("3 - remove task")
+    print("4 - list tasks")
+    print("5 - add sprint")
+    print("6 - list sprints")
     print("0 - exit")
 
 
@@ -39,14 +41,18 @@ def invoke_option(user_input):
         case 1:
             add_task()
         case 2:
-            remove_task()
+            edit_task()
         case 3:
-            Task.print_extent()
+            remove_task()
         case 4:
+            Task.print_extent()
+        case 5:
             try:
                 create_sprint()
             except ValueError:
                 print("Invalid date format")
+        case 6:
+            Sprint.list_sprints()
 
 
 def add_task():
@@ -105,3 +111,14 @@ def create_sprint():
         print("Sprint created")
     else:
         print("Sprint not created")
+
+def edit_task():
+    user_input = input("Enter task number: ")
+    try:
+        user_input = int(user_input)
+        task = Task.get_task(user_input)
+        task.edit()
+    except ValueError:
+        print("Invalid input")
+    except InvalidTaskInputException as ex:
+        print(ex.message + "\nAborting operation")
