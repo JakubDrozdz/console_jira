@@ -1,4 +1,7 @@
-from Task import *
+from datetime import *
+
+from task.Task import *
+from exception.NoSprintPresentException import NoSprintPresentException
 
 
 def app():
@@ -25,8 +28,13 @@ def app():
 
 def show_menu():
     print("1 - add task")
-    print("2 - remove task")
-    print("3 - list tasks")
+    print("2 - edit task")
+    print("3 - remove task")
+    print("4 - list tasks")
+    print("5 - list filtered tasks")
+    print("6 - add sprint")
+    print("7 - list sprints")
+    print("8 - show sprint board")
     print("0 - exit")
 
 
@@ -35,13 +43,52 @@ def invoke_option(user_input):
         case 1:
             add_task()
         case 2:
-            remove_task()
+            edit_task()
         case 3:
+            remove_task()
+        case 4:
             Task.print_extent()
+        case 5:
+            try:
+                Task.print_filtered_extent()
+            except NoSprintPresentException as ex:
+                print(ex.message + "\nOperation cancelled")
+            except ValueError:
+                print("Wrong data! Operation cancelled")
+        case 6:
+            try:
+                create_sprint()
+            except ValueError:
+                print("Invalid date format")
+        case 7:
+            Sprint.list_sprints()
+        case 8: show_sprint_board()
 
 
 def add_task():
-    Task(task_description="test desc", priority="high", type=TaskType.TASK, sprint_number="S01")
+    try:
+        task_title = str(input("Enter task title "))
+        task_description = str(input("Enter task description: "))
+        print("Choose task priority from following: ")
+        for value in TaskPriority:
+            print(f"\t{value}")
+        priority = TaskPriority(input("Enter task priority: "))
+        print("Choose task type from following: ")
+        for value in TaskType:
+            print(f"\t{value}")
+        task_type = TaskType(input("Enter task type: "))
+        print("Choose task status from following: ")
+        for value in TaskStatus:
+            print(f"\t{value}")
+        task_status = TaskStatus(input("Enter task status: "))
+        sprint = choose_sprint()
+        Task(task_title=task_title, task_description=task_description, task_priority=priority, task_type=TaskType(task_type), task_status=TaskStatus(task_status), sprint=sprint)
+    except ValueError:
+        print("Wrong data!\nAborting operation")
+    except InvalidTaskInputException as ex:
+        print(ex.message + "\nAborting operation")
+    except NoSprintPresentException as ex:
+        print(ex.message + "\nAborting operation")
 
 
 def remove_task():
@@ -51,3 +98,52 @@ def remove_task():
         Task.remove_from_extent(user_input)
     except ValueError:
         print("Invalid input")
+
+
+def choose_sprint():
+    print("Choose sprint number from following: ")
+    for sprint in Sprint.get_active_sprints():
+        print(f"\t{sprint.get_sprint_number()}")
+    return Sprint.get_sprint(input("Enter sprint number: "))
+
+
+def create_sprint():
+    print("Details of next sprint:")
+    print("Sprint number: " + str(Sprint.calculate_sprint_number()))
+    start_date = Sprint.calculate_start_date()
+    print("Sprint start date: " + str(start_date))
+    end_date = datetime.strptime(input("Enter end date(yyyy-mm-dd) (sprint max length is 2 - 4 weeks):"), "%Y-%m-%d").date()
+    end_date = Sprint.calculate_end_date(end_date=end_date, start_date=start_date)
+    print("Sprint end date: " + str(end_date))
+    accepted = input("Pres Y to accept or other key to reject:")
+    if accepted.lower() == "y":
+        Sprint(end_date)
+        print("Sprint created")
+    else:
+        print("Sprint not created")
+
+def edit_task():
+    user_input = input("Enter task number: ")
+    try:
+        user_input = int(user_input)
+        task = Task.get_task(user_input)
+        task.edit()
+    except ValueError:
+        print("Invalid input")
+    except InvalidTaskInputException as ex:
+        print(ex.message + "\nAborting operation")
+
+def show_sprint_board():
+    sprint = choose_sprint()
+    tasks = set(filter(lambda task: task.sprint_number == sprint, Task.get_extent()))
+    grouped_tasks = {TaskStatus.OPEN: [], TaskStatus.IN_PROGRESS: [], TaskStatus.IN_REVIEW: [], TaskStatus.CLOSED: []}
+    for task in tasks:
+        grouped_tasks[task.task_status].append(task)
+    print()
+    for task_group in grouped_tasks:
+        tasks = sorted(grouped_tasks[task_group], key=lambda t: t.task_number, reverse=False)
+        print(task_group.value + ":")
+        for task in tasks:
+            print(str(task.task_number)+";"+task.task_title+":"+task.priority.value)
+        print("---------------")
+    print()

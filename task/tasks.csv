@@ -1,0 +1,7 @@
+task_number;task_title;task_description;priority;type;status;sprint_number
+1;Task 1;Test description 1;Low;Task;Open;S2
+2;Defect 1;Test description 2;High;Defect;In review;S2
+3;Task 2;Test description 3;Medium;Task;Closed;S2
+4;Task 3;Test description 4;Critical;Task;In progress;S2
+5;Defect 2;Test description;Low;Defect;Open;S2
+6;Test story;Test story description;Medium;Story;Open;S3
