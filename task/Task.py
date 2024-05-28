@@ -11,7 +11,7 @@ class Task:
 
     __taskExtent = []
 
-    def __init__(self, task_description: str, task_title: str, priority: TaskPriority, type: TaskType, status: TaskStatus, sprint_number: Sprint, task_number: int = -1):
+    def __init__(self, task_description: str, task_title: str, task_priority: TaskPriority, task_type: TaskType, task_status: TaskStatus, sprint: Sprint, task_number: int = -1):
         self.task_number = None
         self.task_title = None
         self.task_description = None
@@ -23,10 +23,10 @@ class Task:
         self.set_task_number(task_number)
         self.set_task_title(task_title)
         self.set_task_description(task_description)
-        self.set_task_priority(priority)
-        self.set_task_type(type)
-        self.set_task_sprint_number(sprint_number)
-        self.set_task_status(status)
+        self.set_task_priority(task_priority)
+        self.set_task_type(task_type)
+        self.set_task_sprint(sprint)
+        self.set_task_status(task_status)
         Task.__taskExtent.append(self)
 
     def __str__(self):
@@ -58,8 +58,8 @@ class Task:
     def set_task_type(self, type: TaskType):
         self.type = type
 
-    def set_task_sprint_number(self, sprint_number: Sprint):
-        self.sprint_number = sprint_number
+    def set_task_sprint(self, sprint: Sprint):
+        self.sprint_number = sprint
 
     def set_task_status(self, status: TaskStatus):
         self.task_status = status
@@ -194,10 +194,10 @@ class Task:
                         task_number=int(entry["task_number"]),
                         task_title=str(entry["task_title"]),
                         task_description=str(entry["task_description"]),
-                        priority=TaskPriority(entry["priority"]),
-                        type=TaskType(entry["type"]),
-                        status=TaskStatus(entry["status"]),
-                        sprint_number=Sprint.get_sprint(entry["sprint_number"])
+                        task_priority=TaskPriority(entry["priority"]),
+                        task_type=TaskType(entry["type"]),
+                        task_status=TaskStatus(entry["status"]),
+                        sprint=Sprint.get_sprint(entry["sprint_number"])
                     )
                 except:
                     print("Error while adding Task: " + entry)

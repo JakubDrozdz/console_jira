@@ -34,7 +34,7 @@ def show_menu():
     print("5 - list filtered tasks")
     print("6 - add sprint")
     print("7 - list sprints")
-    print("8 - show tasks board")
+    print("8 - show sprint board")
     print("0 - exit")
 
 
@@ -62,7 +62,7 @@ def invoke_option(user_input):
                 print("Invalid date format")
         case 7:
             Sprint.list_sprints()
-        case 8: show_tasks_board()
+        case 8: show_sprint_board()
 
 
 def add_task():
@@ -82,7 +82,7 @@ def add_task():
             print(f"\t{value}")
         task_status = TaskStatus(input("Enter task status: "))
         sprint = choose_sprint()
-        Task(task_title=task_title, task_description=task_description, priority=priority, type=TaskType(task_type), status=TaskStatus(task_status), sprint_number=sprint)
+        Task(task_title=task_title, task_description=task_description, task_priority=priority, task_type=TaskType(task_type), task_status=TaskStatus(task_status), sprint=sprint)
     except ValueError:
         print("Wrong data!\nAborting operation")
     except InvalidTaskInputException as ex:
@@ -133,7 +133,7 @@ def edit_task():
     except InvalidTaskInputException as ex:
         print(ex.message + "\nAborting operation")
 
-def show_tasks_board():
+def show_sprint_board():
     sprint = choose_sprint()
     tasks = set(filter(lambda task: task.sprint_number == sprint, Task.get_extent()))
     grouped_tasks = {TaskStatus.OPEN: [], TaskStatus.IN_PROGRESS: [], TaskStatus.IN_REVIEW: [], TaskStatus.CLOSED: []}
